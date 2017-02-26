@@ -41,12 +41,12 @@ def verify_user(username, password):
         con.close()
     return False
 
-print insert_user("Fred", "password")
-print insert_user("Bill", "swordfish")
-print verify_user("Fred", "password")
-print verify_user("Fred", "pass")
-print verify_user("bill", "pass")
-print verify_user("Bill", "swordfish")
+# print insert_user("Fred", "password")
+# print insert_user("Bill", "swordfish")
+# print verify_user("Fred", "password")
+# print verify_user("Fred", "pass")
+# print verify_user("bill", "pass")
+# print verify_user("Bill", "swordfish")
 
 # try:
 #     with sqlite3.connect("database.db") as con:
@@ -67,6 +67,12 @@ app = Flask(__name__)
 @app.route("/")
 def hello():
     return render_template('index.html')
+@app.route("/signin")
+def signin():
+    return render_template('signin.html')
+@app.route("/profile")
+def profile():
+    return render_template('profile.html')
 if __name__ == "__main__":
     app.run()
 
