@@ -17,6 +17,7 @@ def insert_user(username, password, location):
             with sqlite3.connect("database.db") as con:
                 fred = con.execute("SELECT username from users where username = (?)", (username, ))
                 rows = fred.fetchall()
+                print "Fetching location"
                 f = urllib.urlopen("http://www.mapquestapi.com/geocoding/v1/address?key=snDZGmb07Jc3pnSyuKxpqhQo7l6ExlEr&location=%s" % location)
                 js = json.reads(f.read())
                 location = js['results'][0]['locations'][0]['displayLatLng']
