@@ -110,14 +110,20 @@ def signup():
     except Exception as e:
         print "Error:", e
 
+
+
+@app.route("/projects")
+def projects():
+    return render_template('multiverse.html')
+
+
 @app.route("/")
 def hello():
     return render_template('index.html')
-
 @app.route("/test")
 def test():
     return render_template('test.html')
-
+    
 @app.route("/signup")
 def signin():
     return render_template('signup.html')
