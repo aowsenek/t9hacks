@@ -31,7 +31,7 @@
          <h1>Sign Up for Tinder For Tech</h1>
       <div class="split style1">
       <section>
-         <form method="post" action="/signup">
+         <form method="post" action="/signupform">
             <div class="field half first">
                <label for="Username">Username</label>
                <input required type="text" name="username" id="username" />
@@ -44,14 +44,17 @@
                <label for="Name">Name</label>
                <input required type="text" name="name" id="name" />
             </div>
-            <div class="field half first">
-               <label for="Username">Username</label>
-               <input required type="text" name="username" id="username" />
+            <div class="field half">
+               <label for="gender">Gender?</label>
+               <input required type="text" name="gender" id="gender" />
             </div>
-            <div class="field">
-               <label for="Project or Person">Project or Person?</label>
-               <input type="radio" name="pop" value="project" id="pop">Project 
-               <input type="radio" name="pop" value="person" id="pop">Person 
+            <div class="field half first">
+               <label for="Location">City, State</label>
+               <input required type="text" name="location" id="location" />
+            </div>
+            <div class="field half">
+               <label for="profile">Describe Yourself</label>
+               <input required type="text" name="profile" id="profile" />
             </div>
             <ul class="actions">
                <li><a href="" class="button submit">Submit</a></li>
@@ -62,5 +65,14 @@
       <class="wrapper style1 fade-up">
       <div class="inner">
       </section>
+
+			<script src="../static/hyper/js/jquery.min.js"></script>
+			<script src="../static/hyper/js/jquery.scrollex.min.js"></script>
+			<script src="../static/hyper/js/jquery.scrolly.min.js"></script>
+			<script src="../static/hyper/js/skel.min.js"></script>
+			<script src="../static/hyper/js/util.js"></script>
+			<!--[if lte IE 8]><script src="hyper/js/ie/respond.min.js"></script><![endif]-->
+			<script src="../static/hyper/js/main.js"></script>
+
    </body>
 </html>

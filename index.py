@@ -54,17 +54,17 @@ def login():
     # return render_template('index.html')
 
 
-@app.route("/signup", methods = ['POST', 'GET'])
+@app.route("/signupform", methods = ['POST', 'GET'])
 def signup():
     insert_user(request.form['username'], request.form['password'])
-    return render_template('index.html')
+    return render_template('profile.html')
 
 @app.route("/")
 def hello():
-    return render_template('test.html')
-@app.route("/signin")
+    return render_template('index.html')
+@app.route("/signup")
 def signin():
-    return render_template('signin.html')
+    return render_template('signup.html')
 @app.route("/profile")
 def profile():
     return render_template('profile.html')
