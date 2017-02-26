@@ -1,15 +1,15 @@
-from flask import Flask, request, redirect, url_for
-from flask import render_template, make_response
+from flask import Flask, request, redirect, url_for, render_template, make_response
 from flask_bootstrap import Bootstrap
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+import os
 import sqlite3
 import urllib
 import json
 
 c = sqlite3.connect('database.db')
 c.execute('CREATE TABLE IF NOT EXISTS users (username TEXT, password TEXT, lat TEXT, lng TEXT, gender TEXT, description TEXT)')
-c.execute('CREATE TABLE IF NOT EXISTS projects (owner TEXT, description TEXT, lat TEXT, lng TEXT, imglink TEXT)')
+c.execute('CREATE TABLE IF NOT EXISTS projects (owner TEXT, name TEXT, catagory TEXT, description TEXT, lat TEXT, lng TEXT, imglink TEXT)')
 c.close()
 
 def insert_user(username, password, location, gender, description):
@@ -53,19 +53,21 @@ def generateUserImage():
     finally:
         con.close()
 
-def insert_project(owner, description, imglink):
-        try:
-            with sqlite3.connect("database.db") as con:
-                f = urllib.urlopen("http://www.mapquestapi.com/geocoding/v1/address?key=snDZGmb07Jc3pnSyuKxpqhQo7l6ExlEr&location=%s" % location)
-                js = json.loads(f.read())
-                location = js['results'][0]['locations'][0]['displayLatLng']
-                con.execute("INSERT INTO projects (owner, description, lat, lng, imglink) VALUES (?, ?, ?, ?, ?)", (owner, description, location['lat'], location['lng'], imglink, ))
-                con.commit()
-        except Exception as e:
-            print "Error: ", e
-            con.rollback()
-        finally:
-            con.close()
+def insert_project(owner, name, catagory, description, location, imglink):
+    
+    try:
+        with sqlite3.connect("database.db") as con:
+            f = urllib.urlopen("http://www.mapquestapi.com/geocoding/v1/address?key=snDZGmb07Jc3pnSyuKxpqhQo7l6ExlEr&location=%s" % location)
+            js = json.loads(f.read())
+            location = js['results'][0]['locations'][0]['displayLatLng']
+            print "Location:", location
+            con.execute("INSERT INTO projects (owner, description, catagory, lat, lng, imglink) VALUES (?, ?, ?, ?, ?, ?)", (owner, description, location['lat'], location['lng'], imglink, ))
+            con.commit()
+    except Exception as e:
+        print "Insert project error: ", e
+        con.rollback()
+    finally:
+        con.close()
 
 def verify_user(username, password):
     try:
@@ -82,8 +84,8 @@ def verify_user(username, password):
         con.close()
     return False
 
-UPLOAD_FOLDER = '/images'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+UPLOAD_FOLDER = 'images'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -123,13 +125,29 @@ def hello():
 @app.route("/test")
 def test():
     return render_template('test.html')
-    
+
 @app.route("/signup")
 def signin():
     return render_template('signup.html')
 
-@app.route("/createproject")
+@app.route("/createproject", methods = ['POST', 'GET'])
 def makeprojet():
+    token = request.cookies.get('token')
+    if not token:
+        print "Bad token!"
+        return render_template('index.html')
+    try:
+        file = request.files['image']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            imglink = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(imglink)
+    except Exception as e:
+        print "File upload error:", e
+    insert_project(token, request.form['name'], request.form['catagory'], request.form['description'], request.form['location'], imglink)
     return render_template('index.html')
 
 @app.route("/profile")
@@ -149,7 +167,7 @@ def profile():
         con.rollback()
     finally:
         con.close()
-
     return render_template('profile.html')
+
 if __name__ == "__main__":
     app.run()
