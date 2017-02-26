@@ -9,10 +9,7 @@
 		<title>Photon by HTML5 UP</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="../static/photon/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="../static/photon/css/main.css" />
-		<!--[if lte IE 8]><link rel="stylesheet" href="../static/photon/css/ie8.css" /><![endif]-->
-		<!--[if lte IE 9]><link rel="stylesheet" href="../static/photon/css/ie9.css" /><![endif]-->
 	</head>
 	<body>
 
@@ -24,7 +21,7 @@
 					<p>Describe<br />
 					Yourself</p>
 					<ul class="actions">
-						<li><a href="#one" class="button scrolly">Discover</a></li>
+						<li><a href="#one" class="button scrolly">Make a Project</a></li>
 					</ul>
 				</div>
 			</section>
@@ -42,36 +39,33 @@
 								<li><span class="icon style5 major fa-desktop"></span></li>
 							</ul>
 						</div>
-						<div class="6u$ 12u$(medium)">
+<!--						<div class="6u$ 12u$(medium)">
 							<header class="major">
-								<h2>Lorem ipsum dolor adipiscing<br />
-								amet dolor consequat</h2>
+								<h2>{{project}}</h2>
 							</header>
-							<p>Adipiscing a commodo ante nunc accumsan interdum mi ante adipiscing. A nunc lobortis non nisl amet vis volutpat aclacus nascetur ac non. Lorem curae eu ante amet sapien in tempus ac. Adipiscing id accumsan adipiscing ipsum.</p>
-							<p>Blandit faucibus proin. Ac aliquam integer adipiscing enim non praesent vis commodo nunc phasellus cubilia ac risus accumsan. Accumsan blandit. Lobortis phasellus non lobortis dit varius mi varius accumsan lobortis. Blandit ante aliquam lacinia lorem lobortis semper morbi col faucibus vitae integer placerat accumsan orci eu mi odio tempus adipiscing adipiscing adipiscing curae consequat feugiat etiam dolore.</p>
-							<p>Adipiscing a commodo ante nunc accumsan interdum mi ante adipiscing. A nunc lobortis non nisl amet vis volutpat aclacus nascetur ac non. Lorem curae eu ante amet sapien in tempus ac. Adipiscing id accumsan adipiscing ipsum.</p>
-						</div>
+                       <p>{{projectdescription}}</p>
+						</div>-->
 					</div>
 				</div>
 			</section>
 
 		<!-- Five -->
 		
-			<section id="five" class="main style1">
+			<section id="two" class="main style1">
 				<div class="container">
 					<section>
 						<h4>Make a Project</h4>
 						<form method="post" action="#">
 							<div class="row uniform 50%">
 								<div class="6u 12u$(xsmall)">
-									<input type="text" name="name" id="name" value="" placeholder="Project Name" />
+									<input type="text" name="name" id="name" value="" placeholder="Project Name" >
 								</div>
 								<div class="6u$ 12u$(xsmall)">
-									<input type="location" name="location" id="location" value="" placeholder="Location" />
+									<input type="text" name="location" id="location" value="" placeholder="Location" />
 								</div>
 								<div class="12u$">
 									<div class="select-wrapper">
-										<select name="demo-category" id="demo-category">
+										<select name="category" id="category">
 											<option value="">- Category -</option>
 											<option value="1">Software</option>
 											<option value="2">Hardware</option>
@@ -91,10 +85,6 @@
 							</div>
 						</form>
 					</section>
-
-		<!-- Footer -->
-			<section id="footer">
-			</section>
 
 		<!-- Scripts -->
 			<script src="../static/photon/js/jquery.min.js"></script>
