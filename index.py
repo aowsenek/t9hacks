@@ -1,22 +1,32 @@
-from flask import Flask, request
-from flask import render_template
+from flask import Flask, request, redirect, url_for
+from flask import render_template, make_response
 from flask_bootstrap import Bootstrap
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import sqlite3
+import urllib
+import json
 
 c = sqlite3.connect('database.db')
-c.execute('CREATE TABLE IF NOT EXISTS users (username TEXT, password TEXT, lat TEXT, lon TEXT)')
+c.execute('CREATE TABLE IF NOT EXISTS users (username TEXT, password TEXT, lat TEXT, lng TEXT)')
 c.execute('CREATE TABLE IF NOT EXISTS projects (owner TEXT, description TEXT, imglink TEXT)')
 c.close()
-
-def insert_user(username, password):
+#http://www.mapquestapi.com/geocoding/v1/address?key=snDZGmb07Jc3pnSyuKxpqhQo7l6ExlEr&location=Boulder,CO
+def insert_user(username, password, location):
         try:
             with sqlite3.connect("database.db") as con:
                 fred = con.execute("SELECT username from users where username = (?)", (username, ))
                 rows = fred.fetchall()
+
+                print "Fetching location"
+                f = urllib.urlopen("http://www.mapquestapi.com/geocoding/v1/address?key=snDZGmb07Jc3pnSyuKxpqhQo7l6ExlEr&location=%s" % location)
+                js = json.loads(f.read())
+                location = js['results'][0]['locations'][0]['displayLatLng']
+                print "Location:", location['lat'], location['lng']
+
                 if len(rows) != 0:
                     raise Exception("User already exists")
-                con.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, generate_password_hash(password), ))
+                con.execute("INSERT INTO users (username, password, lat, lng) VALUES (?, ?)", (username, generate_password_hash(password), location['lat'], location['lng'], ))
                 con.commit()
         except Exception as e:
             print "Error: ", e
@@ -40,31 +50,47 @@ def verify_user(username, password):
         con.close()
     return False
 
+UPLOAD_FOLDER = '/images'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
-#Bootstrap(app)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route("/login", methods = ['POST', 'GET'])
 def login():
     # if request.method == 'POST':
     valid = verify_user(request.form['username'], request.form['password'])
     print ("User logged in!" if valid else "Wrong password!")
-    resp = make_response(render_template('readcookie.html'))
-    resp.set_cookie('token', request.form['password'])
+    resp = make_response(render_template('index.html'))
+    resp.set_cookie('token', request.form['username'])
     return resp
     # return render_template('index.html')
 
-
-@app.route("/signup", methods = ['POST', 'GET'])
+@app.route("/signupform", methods = ['POST', 'GET'])
 def signup():
-    insert_user(request.form['username'], request.form['password'])
-    return render_template('index.html')
+    insert_user(request.form['username'], request.form['password'], request.form['location'])
+    resp = make_response(render_template('index.html'))
+    resp.set_cookie('token', request.form['username'])
+    return resp
+
+
+
+@app.route("/projects")
+def projects():
+    return render_template('multiverse.html') 
+
 
 @app.route("/")
 def hello():
+    return render_template('index.html')
+@app.route("/test")
+def test():
     return render_template('test.html')
-@app.route("/signin")
+@app.route("/signup")
 def signin():
-    return render_template('signin.html')
+    return render_template('signup.html')
 @app.route("/profile")
 def profile():
     return render_template('profile.html')

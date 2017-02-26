@@ -2427,15 +2427,8 @@
 
 	input[type="checkbox"],
 	input[type="radio"] {
-		-moz-appearance: none;
-		-webkit-appearance: none;
-		-ms-appearance: none;
-		appearance: none;
-		display: block;
-		float: left;
 		margin-right: -2em;
-		opacity: 0;
-		width: 1em;
+		width: 100px;
 		z-index: -1;
 	}
 
@@ -2452,7 +2445,7 @@
 			position: relative;
 		}
 
-			input[type="checkbox"] + label:before,
+		/*	input[type="checkbox"] + label:before,
 			input[type="radio"] + label:before {
 				-moz-osx-font-smoothing: grayscale;
 				-webkit-font-smoothing: antialiased;
@@ -2498,7 +2491,7 @@
 
 	input[type="radio"] + label:before {
 		border-radius: 100%;
-	}
+	}*/
 
 	::-webkit-input-placeholder {
 		color: rgba(255, 255, 255, 0.35) !important;
