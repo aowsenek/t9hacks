@@ -82,6 +82,7 @@ def hello():
 @app.route("/test")
 def test():
     return render_template('test.html')
+    
 @app.route("/signup")
 def signin():
     return render_template('signup.html')
