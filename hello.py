@@ -23,9 +23,9 @@ webpage = '''
 @app.route("/")
 def hello():
     return render_template('index.html')
-@app.route("/signin")
+@app.route("/signup")
 def signin():
-    return render_template('signin.html')
+    return render_template('signup.html')
 @app.route("/profile")
 def profile():
     return render_template('profile.html')
